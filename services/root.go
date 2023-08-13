@@ -30,8 +30,8 @@ func NewService(cfg *config.Config) (*ServiceRoot, error) {
 	service.Search = newSearchService(service.elasticSearch.Search)
 	service.Update = newUpdateService(service.elasticSearch)
 	service.Delete = newDeleteService(service.elasticSearch)
-	service.Create = newCreateService(service.elasticSearch)
-	service.Admin = newAdminService(service.elasticSearch)
+	service.Create = newCreateService(service.elasticSearch.Create)
+	service.Admin = newAdminService(service.elasticSearch.Admin)
 
 	return service, nil
 }

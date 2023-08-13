@@ -22,9 +22,9 @@ func NewSearchApi(engine *gin.Engine, service *services.Search) {
 
 	baseUri := "search"
 
-	search.engine.GET(baseUri+"/user-by-name/:name", search.searchUserByName)
-	search.engine.GET(baseUri+"/user-by-age/:age", search.searchUserByAge)
-	search.engine.GET(baseUri+"/user-by-address/:address", search.searchUserByAddress)
+	search.engine.POST(baseUri+"/user-by-name/:name", search.searchUserByName)
+	search.engine.POST(baseUri+"/user-by-age/:age", search.searchUserByAge)
+	search.engine.POST(baseUri+"/user-by-address/:address", search.searchUserByAddress)
 
 }
 

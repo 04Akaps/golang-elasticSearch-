@@ -3,6 +3,8 @@ package repository
 import (
 	"context"
 	"elasticSearch/types"
+	"elasticSearch/types/schema"
+	"encoding/json"
 	"fmt"
 	"github.com/olivere/elastic/v7"
 )
@@ -22,14 +24,18 @@ func (s *Search) SearchUser(index string, query elastic.Query, size types.Size, 
 
 	base := client.Search(index).Query(query).Pretty(true)
 
-	if size.Size != 0 {
-		base.Size(int(size.Size))
-	}
-
 	if len(text.Text) != 0 {
 		for _, t := range text.Text {
 			base.Sort(t, true)
 		}
+	}
+
+	if size.From != 0 {
+		base.From(int(size.From))
+	}
+
+	if size.Size != 0 {
+		base.Size(int(size.Size))
 	}
 
 	if err := checkIndexExisted(client, index); err != nil {
@@ -39,12 +45,11 @@ func (s *Search) SearchUser(index string, query elastic.Query, size types.Size, 
 	} else {
 		searchHit := result.Hits
 		for _, v := range searchHit.Hits {
-			fmt.Println(v)
-			//model := &DummyModel{}
-			//	if err = json.Unmarshal(v.Source, model); err != nil {
-			//		panic(err)
-			//	}
-			//	fmt.Println("name : ", model.Name, " Age : ", model.Age, " Address : ", model.Address, " Inner : ", model.Inner)
+			model := &schema.User{}
+			if err = json.Unmarshal(v.Source, model); err != nil {
+				panic(err)
+			}
+			fmt.Println("name : ", model.Name, " Age : ", model.Age, " Address : ", model.Address)
 		}
 
 		return nil

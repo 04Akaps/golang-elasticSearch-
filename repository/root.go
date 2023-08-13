@@ -7,10 +7,12 @@ import (
 )
 
 type Elastic struct {
-	client *elastic.Client
+	Client *elastic.Client
 	logger log15.Logger
 
 	Search *Search
+	Create *Create
+	Admin  *Admin
 }
 
 func NewElastic(cfg *config.Config) (*Elastic, error) {
@@ -29,9 +31,11 @@ func NewElastic(cfg *config.Config) (*Elastic, error) {
 	); err != nil {
 		return nil, err
 	} else {
-		elasticClient.client = client
+		elasticClient.Client = client
 
 		elasticClient.Search = newSearch(client)
+		elasticClient.Create = newCreate(client)
+		elasticClient.Admin = newAdmin(client)
 
 		type ElsStatus struct {
 			User     string `json:"user"`
