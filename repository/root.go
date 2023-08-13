@@ -1,17 +1,16 @@
 package repository
 
 import (
-	"context"
 	"elasticSearch/config"
-	"errors"
-	"fmt"
 	"github.com/inconshreveable/log15"
 	"github.com/olivere/elastic/v7"
 )
 
 type Elastic struct {
-	Client *elastic.Client
+	client *elastic.Client
 	logger log15.Logger
+
+	Search *Search
 }
 
 func NewElastic(cfg *config.Config) (*Elastic, error) {
@@ -30,7 +29,9 @@ func NewElastic(cfg *config.Config) (*Elastic, error) {
 	); err != nil {
 		return nil, err
 	} else {
-		elasticClient.Client = client
+		elasticClient.client = client
+
+		elasticClient.Search = newSearch(client)
 
 		type ElsStatus struct {
 			User     string `json:"user"`
@@ -44,34 +45,5 @@ func NewElastic(cfg *config.Config) (*Elastic, error) {
 		elasticClient.logger.Info("Connected To ElasticSearch", "info", *status)
 
 		return elasticClient, nil
-	}
-}
-
-func (els *Elastic) CheckIndexExisted(index string) error {
-	ctx := context.TODO()
-	indices := []string{index}
-	client := els.Client
-
-	existService := elastic.NewIndicesExistsService(client)
-	existService.Index(indices)
-
-	exist, err := existService.Do(ctx)
-
-	if err != nil {
-		message := fmt.Sprintf("NewIndicesExistsService.Do() %s", err.Error())
-		return errors.New(message)
-	} else if !exist {
-		fmt.Println("nOh no! The index", index, "doesn't exist.")
-		fmt.Println("Create the index, and then run the Go script again")
-		if _, err = client.CreateIndex(index).Do(ctx); err != nil {
-			return err
-		} else {
-			return nil
-		}
-	} else if exist {
-		fmt.Println("Index name:", index, " exists!")
-		return nil
-	} else {
-		return nil
 	}
 }

@@ -27,7 +27,7 @@ func NewService(cfg *config.Config) (*ServiceRoot, error) {
 		return nil, err
 	}
 
-	service.Search = newSearchService(service.elasticSearch)
+	service.Search = newSearchService(service.elasticSearch.Search)
 	service.Update = newUpdateService(service.elasticSearch)
 	service.Delete = newDeleteService(service.elasticSearch)
 	service.Create = newCreateService(service.elasticSearch)

@@ -35,11 +35,14 @@ func (m *Create) createUser(c *gin.Context) {
 		return
 	}
 
-	test := &schema.User{
+	if err := m.service.CreateData("user", &schema.User{
 		Name:    req.Name,
 		Age:     req.Age,
 		Address: req.Address,
+	}); err != nil {
+		errResponse(c, err.Error())
+	} else {
+		successResponse(c, "success add new User")
 	}
 
-	successResponse(c, test)
 }

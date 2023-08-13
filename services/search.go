@@ -1,39 +1,31 @@
 package services
 
 import (
-	"context"
 	"elasticSearch/repository"
-	"fmt"
-	"github.com/olivere/elastic/v7"
+	"elasticSearch/types"
 )
 
 type Search struct {
-	elasticSearch *repository.Elastic
+	search *repository.Search
 }
 
-func newSearchService(elasticSearch *repository.Elastic) *Search {
-	return &Search{elasticSearch: elasticSearch}
+func newSearchService(elasticSearch *repository.Search) *Search {
+	return &Search{search: elasticSearch}
 }
 
-func (s *Search) SearchData(index string, query elastic.Query) error {
-	instance := s.elasticSearch
-	client := instance.Client
+func (s *Search) SearchByName(index, name string, size types.Size, text types.Sort) error {
+	// TODO Query 작성
+	//query := elastic.NewBoolQuery()
+	//elastic.NewTermQuery()
+	return s.search.SearchUser(index, nil, size, text)
+}
 
-	if err := instance.CheckIndexExisted(index); err != nil {
-		return err
-	} else if result, err := client.Search(index).Query(query).Pretty(true).Size(100).Do(context.TODO()); err != nil {
-		return err
-	} else {
-		searchHit := result.Hits
-		for _, v := range searchHit.Hits {
-			fmt.Println(v)
-			//model := &DummyModel{}
-			//	if err = json.Unmarshal(v.Source, model); err != nil {
-			//		panic(err)
-			//	}
-			//	fmt.Println("name : ", model.Name, " Age : ", model.Age, " Address : ", model.Address, " Inner : ", model.Inner)
-		}
+func (s *Search) SearchByAddress(index, address string, size types.Size, text types.Sort) error {
+	// TODO Query 작성
+	return s.search.SearchUser(index, nil, size, text)
+}
 
-		return nil
-	}
+func (s *Search) SearchByAge(index string, age int64, size types.Size, text types.Sort) error {
+	// TODO Query 작성
+	return s.search.SearchUser(index, nil, size, text)
 }
