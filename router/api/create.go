@@ -2,7 +2,8 @@ package api
 
 import (
 	"elasticSearch/services"
-	"fmt"
+	"elasticSearch/types"
+	"elasticSearch/types/schema"
 	"github.com/gin-gonic/gin"
 	"github.com/inconshreveable/log15"
 )
@@ -20,5 +21,25 @@ func NewCreateApi(engine *gin.Engine, service *services.Create) {
 		service: service,
 	}
 
-	fmt.Println(create)
+	baseUri := "create"
+
+	create.engine.POST(baseUri+"/user", create.createUser)
+
+}
+
+func (m *Create) createUser(c *gin.Context) {
+	var req types.CreateUserReq
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		errResponse(c, err.Error())
+		return
+	}
+
+	test := &schema.User{
+		Name:    req.Name,
+		Age:     req.Age,
+		Address: req.Address,
+	}
+
+	successResponse(c, test)
 }

@@ -14,6 +14,7 @@ type ServiceRoot struct {
 	Update *Update
 	Delete *Delete
 	Create *Create
+	Admin  *Admin
 }
 
 func NewService(cfg *config.Config) (*ServiceRoot, error) {
@@ -30,6 +31,7 @@ func NewService(cfg *config.Config) (*ServiceRoot, error) {
 	service.Update = newUpdateService(service.elasticSearch)
 	service.Delete = newDeleteService(service.elasticSearch)
 	service.Create = newCreateService(service.elasticSearch)
+	service.Admin = newAdminService(service.elasticSearch)
 
 	return service, nil
 }
