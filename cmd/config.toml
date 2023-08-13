@@ -1,0 +1,7 @@
+[elastic]
+uri = "http://localhost:9200"
+user = "123"
+password = "123"
+
+[server]
+port = ":8080"
