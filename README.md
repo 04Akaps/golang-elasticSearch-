@@ -8,6 +8,18 @@
 - 부가적으로 메서드의 역할에 대해서는 다룰 수 있습니다.
 
 
+## 레파지토리 생성 목적
+이전에 작업했던 MySql, Mongo에서의 데이터 변화를 감지하는 모듈에 대한 변화를
+ElasticSearch에 동기화 하는 로직을 구성한 바 있다.
+```azure
+MySql - https://github.com/04Akaps/mysql-elastic-event-cahcer-server-
+
+Mongo - https://github.com/04Akaps/mongo-elastic-event-cahcer-server
+```
+
+이렇게 구성한 데이터를 이제 검색 엔진에서 어떻게 데이터를 가져오고 활용해야 하는지에 대한 코드르 작업하는 것을 목표로 삼고 있다.
+- 거창하게 말했지 그냥, ElasticSearch 코드 작성하고 싶어서 생성한 레포
+
 <h3>Docker</h3>
 ```
 docker run -d -p 9200:9200 -p 9300:9300 \
