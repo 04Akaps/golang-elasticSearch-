@@ -31,6 +31,18 @@ func NewElastic(cfg *config.Config) (*Elastic, error) {
 		return nil, err
 	} else {
 		elasticClient.Client = client
+
+		type ElsStatus struct {
+			User     string `json:"user"`
+			Password string `json:"password"`
+		}
+		status := &ElsStatus{
+			User:     elasticCfg.User,
+			Password: elasticCfg.Password,
+		}
+
+		elasticClient.logger.Info("Connected To ElasticSearch", "info", *status)
+
 		return elasticClient, nil
 	}
 }

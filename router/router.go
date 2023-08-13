@@ -3,6 +3,8 @@ package router
 import (
 	"elasticSearch/config"
 	"elasticSearch/repository"
+	"elasticSearch/router/api"
+	"elasticSearch/services"
 	"fmt"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -14,6 +16,7 @@ type Router struct {
 	engine  *gin.Engine
 	logger  log15.Logger
 	config  *config.Config
+	service *services.ServiceRoot
 	elastic *repository.Elastic
 }
 
@@ -21,7 +24,7 @@ func NewRouter(cfg *config.Config) (*Router, error) {
 	r := &Router{
 		engine: gin.New(),
 		config: cfg,
-		logger: log15.New("module", "router"),
+		logger: log15.New("module", "api"),
 	}
 	var err error
 
@@ -39,10 +42,15 @@ func NewRouter(cfg *config.Config) (*Router, error) {
 		MaxAge: 12 * time.Hour,
 	}))
 
-	if r.elastic, err = repository.NewElastic(cfg); err != nil {
+	if r.service, err = services.NewService(cfg); err != nil {
 		r.logger.Crit("Failed Connect ElasticSearch", "crit", err)
 		return nil, err
 	}
+
+	api.NewCreateApi(r.engine, r.service.Create)
+	api.NewSearchApi(r.engine, r.service.Search)
+	api.NewUpdateApi(r.engine, r.service.Update)
+	api.NewDeleteApi(r.engine, r.service.Delete)
 
 	return r, nil
 }
