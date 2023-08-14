@@ -4,6 +4,7 @@ import (
 	"elasticSearch/config"
 	"elasticSearch/router"
 	"github.com/inconshreveable/log15"
+	"os"
 )
 
 type App struct {
@@ -23,12 +24,12 @@ func NewApps(cfg *config.Config) *App {
 
 	if app.router, err = router.NewRouter(cfg); err != nil {
 		app.logger.Crit("Server NewRouter Error", "crit", err)
-		app.stop <- struct{}{}
+		os.Exit(0)
 	}
 
 	if err = app.router.Run(cfg.Server.Port); err != nil {
 		app.logger.Crit("Server Start Error", "Crit", err)
-		app.stop <- struct{}{}
+		os.Exit(0)
 	}
 
 	return app

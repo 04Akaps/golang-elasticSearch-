@@ -1,7 +1,7 @@
 package schema
 
 type User struct {
-	Name    string
-	Address string
-	Age     int64
+	Name    string `json:"name"`
+	Address string `json:"address"`
+	Age     int64  `json:"age"`
 }

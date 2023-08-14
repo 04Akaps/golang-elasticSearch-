@@ -35,10 +35,11 @@ func (m *Search) searchUserByName(c *gin.Context) {
 		errResponse(c, err.Error())
 	} else if err = c.ShouldBindJSON(&req); err != nil {
 		errResponse(c, err.Error())
+	} else if response, err := m.service.SearchByName("user", req.Name, req.Size, req.Sort); err != nil {
+		errResponse(c, err.Error())
 	} else {
-		m.service.SearchByName("user", req.Name, req.Size, req.Sort)
+		successResponse(c, response)
 	}
-
 }
 
 func (m *Search) searchUserByAge(c *gin.Context) {
@@ -48,8 +49,10 @@ func (m *Search) searchUserByAge(c *gin.Context) {
 		errResponse(c, err.Error())
 	} else if err = c.ShouldBindJSON(&req); err != nil {
 		errResponse(c, err.Error())
+	} else if response, err := m.service.SearchByAge("user", req.Age, req.Size, req.Sort); err != nil {
+		errResponse(c, err.Error())
 	} else {
-		m.service.SearchByAge("user", req.Age, req.Size, req.Sort)
+		successResponse(c, response)
 	}
 }
 
@@ -60,7 +63,9 @@ func (m *Search) searchUserByAddress(c *gin.Context) {
 		errResponse(c, err.Error())
 	} else if err = c.ShouldBindJSON(&req); err != nil {
 		errResponse(c, err.Error())
+	} else if response, err := m.service.SearchByAddress("user", req.Address, req.Size, req.Sort); err != nil {
+		errResponse(c, err.Error())
 	} else {
-		m.service.SearchByAddress("user", req.Address, req.Size, req.Sort)
+		successResponse(c, response)
 	}
 }

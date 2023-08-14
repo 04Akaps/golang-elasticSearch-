@@ -19,7 +19,7 @@ func newSearch(client *elastic.Client) *Search {
 	}
 }
 
-func (s *Search) SearchUser(index string, query elastic.Query, size types.Size, text types.Sort) error {
+func (s *Search) SearchUser(index string, query elastic.Query, size types.Size, text types.Sort) ([]*schema.User, error) {
 	client := s.Client
 
 	base := client.Search(index).Query(query).Pretty(true)
@@ -39,19 +39,21 @@ func (s *Search) SearchUser(index string, query elastic.Query, size types.Size, 
 	}
 
 	if err := checkIndexExisted(client, index); err != nil {
-		return err
+		return nil, err
 	} else if result, err := base.Do(context.TODO()); err != nil {
-		return err
+		return nil, err
 	} else {
+		var response []*schema.User
 		searchHit := result.Hits
 		for _, v := range searchHit.Hits {
 			model := &schema.User{}
 			if err = json.Unmarshal(v.Source, model); err != nil {
-				panic(err)
+				return nil, err
 			}
-			fmt.Println("name : ", model.Name, " Age : ", model.Age, " Address : ", model.Address)
+			fmt.Println(*v.Score)
+			response = append(response, model)
 		}
 
-		return nil
+		return response, nil
 	}
 }
