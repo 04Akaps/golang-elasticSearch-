@@ -2,6 +2,7 @@ package api
 
 import (
 	"elasticSearch/services"
+	"elasticSearch/types"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/inconshreveable/log15"
@@ -20,6 +21,22 @@ func NewUpdateApi(engine *gin.Engine, service *services.Update) {
 		service: service,
 	}
 
-	fmt.Println(update)
+	baseUri := "update"
 
+	update.engine.POST(baseUri+"/update-example/:name/:age", update.updateExample)
+
+}
+
+func (u *Update) updateExample(c *gin.Context) {
+
+	var req types.UpdateUserReq
+
+	if err := c.ShouldBindUri(&req); err != nil {
+		errResponse(c, err.Error())
+	} else if err = u.service.UpDateUser("user", req.Name, req.Age); err != nil {
+		errResponse(c, err.Error())
+	} else {
+		msg := fmt.Sprintf("success update User Name : %s, age : %d", req.Name, req.Age)
+		successResponse(c, msg)
+	}
 }

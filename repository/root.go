@@ -12,6 +12,8 @@ type Elastic struct {
 
 	Search *Search
 	Create *Create
+	Update *Update
+	Delete *Delete
 	Admin  *Admin
 }
 
@@ -36,6 +38,8 @@ func NewElastic(cfg *config.Config) (*Elastic, error) {
 		elasticClient.Search = newSearch(client)
 		elasticClient.Create = newCreate(client)
 		elasticClient.Admin = newAdmin(client)
+		elasticClient.Update = newUpdate(client)
+		elasticClient.Delete = newDelete(client)
 
 		type ElsStatus struct {
 			User     string `json:"user"`

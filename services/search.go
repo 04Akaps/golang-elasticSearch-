@@ -42,7 +42,7 @@ func (s *Search) SearchByName(index, name string, size types.Size, text types.So
 	query := elastic.NewBoolQuery()
 	query.Must(elastic.NewMatchQuery("name", name))
 
-	//elastic.NewMatchPhraseQuery("name", name) // -> 완전 name값이 해당 name에 동일한 값만 보인다.
+	//elastic.NewMatchPhraseQuery("name", name) // 입력한 텍스트가 정확하게 연속이 되어야만 탐색이 이루어 진다.
 
 	//query.Must(elastic.NewMatchQuery("name", name).Boost(2.0), elastic.NewMatchQuery("address", "c space e")) // 가중치를 준다. 해당 조건을 만족하는 결과를 더 상위에 위치 시킨다.
 	//query.Must(elastic.NewMatchQuery("name", name), elastic.NewMatchQuery("address", "c space e")) // 이 경우 두 조건을 모두 성립해야 성공

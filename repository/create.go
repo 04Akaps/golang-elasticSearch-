@@ -2,6 +2,8 @@ package repository
 
 import (
 	"context"
+	"elasticSearch/types/schema"
+	"errors"
 	"github.com/olivere/elastic/v7"
 )
 
@@ -16,13 +18,16 @@ func newCreate(client *elastic.Client) *Create {
 }
 
 func (c *Create) CreateData(index string, data interface{}) error {
-	client := c.Client
-
-	if err := checkIndexExisted(client, index); err != nil {
-		return err
-	} else if _, err = client.Index().Index(index).BodyJson(data).Do(context.TODO()); err != nil {
-		return err
+	if user, ok := data.(schema.User); ok {
+		client := c.Client
+		if err := checkIndexExisted(client, index); err != nil {
+			return err
+		} else if _, err = client.Index().Index(index).Id(user.Name).BodyJson(data).Do(context.TODO()); err != nil {
+			return err
+		} else {
+			return nil
+		}
 	} else {
-		return nil
+		return errors.New("Not User Type")
 	}
 }
