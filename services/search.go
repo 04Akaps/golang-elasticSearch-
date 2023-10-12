@@ -38,6 +38,11 @@ func newSearchService(elasticSearch *repository.Search) *Search {
 	return &Search{search: elasticSearch}
 }
 
+func (s *Search) FindAll(index string, size types.Size, text types.Sort) ([]*schema.Migration, error) {
+	query := elastic.NewBoolQuery()
+	return s.search.SearchMigration(index, query, size, text)
+}
+
 func (s *Search) SearchByName(index, name string, size types.Size, text types.Sort) ([]*schema.User, error) {
 	query := elastic.NewBoolQuery()
 	query.Must(elastic.NewMatchQuery("name", name))
@@ -51,6 +56,7 @@ func (s *Search) SearchByName(index, name string, size types.Size, text types.So
 	//query.Should(elastic.NewTermQuery("address", "space")) // 이렇게 전송하면, 내 쿼리에 대해서 점수를 볼 수 있다.
 
 	// elastic.NewWildcardQuery("address", "*space*") // 와일드 카드에 대한 쿼리를 전송 하는 방법
+
 	return s.search.SearchUser(index, query, size, text)
 }
 

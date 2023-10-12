@@ -8,3 +8,5 @@ type Size struct {
 	From int64 `json:"from"`
 	Size int64 `json:"size"`
 }
+
+const Index = "sample-index"

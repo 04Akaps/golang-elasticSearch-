@@ -28,7 +28,6 @@ func checkIndexExisted(client *elastic.Client, index string) error {
 			return nil
 		}
 	} else if exist {
-		fmt.Println("Index name:", index, " exists!")
 		return nil
 	} else {
 		return nil

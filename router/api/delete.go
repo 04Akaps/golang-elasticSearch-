@@ -31,7 +31,7 @@ func (d *Delete) deleteExample(c *gin.Context) {
 
 	if err := c.ShouldBindUri(&req); err != nil {
 		errResponse(c, err.Error())
-	} else if err = d.service.DeleteUser("user", req.Name); err != nil {
+	} else if err = d.service.DeleteUser(types.Index, req.Name); err != nil {
 		errResponse(c, err.Error())
 	} else {
 		msg := fmt.Sprintf("Success To Delete Document -> Name : %s", req.Name)

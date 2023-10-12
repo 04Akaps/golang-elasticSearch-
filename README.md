@@ -24,8 +24,8 @@ Mongo - https://github.com/04Akaps/mongo-elastic-event-cahcer-server
 ```
 docker run -d -p 9200:9200 -p 9300:9300 \
 -e "discovery.type=single-node" \
--e "ELASTIC_USERNAME=<사용할 이름>" \
--e "ELASTIC_PASSWORD=<사용할 패스워드>" \
+-e "ELASTIC_USERNAME="akaps"" \
+-e "ELASTIC_PASSWORD="004"" \
 --name elasticsearch-docker \
 docker.elastic.co/elasticsearch/elasticsearch:7.14.0
 ```

@@ -1,5 +1,10 @@
 package types
 
+type FindAllReq struct {
+	Sort
+	Size
+}
+
 type SearchByNameReq struct {
 	Name string `uri:"name" binding:"required"`
 	Sort

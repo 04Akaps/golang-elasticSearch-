@@ -33,7 +33,7 @@ func (u *Update) updateExample(c *gin.Context) {
 
 	if err := c.ShouldBindUri(&req); err != nil {
 		errResponse(c, err.Error())
-	} else if err = u.service.UpDateUser("user", req.Name, req.Age); err != nil {
+	} else if err = u.service.UpDateUser(types.Index, req.Name, req.Age); err != nil {
 		errResponse(c, err.Error())
 	} else {
 		msg := fmt.Sprintf("success update User Name : %s, age : %d", req.Name, req.Age)

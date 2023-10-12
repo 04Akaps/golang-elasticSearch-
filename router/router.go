@@ -2,7 +2,6 @@ package router
 
 import (
 	"elasticSearch/config"
-	"elasticSearch/repository"
 	"elasticSearch/router/api"
 	"elasticSearch/services"
 	"fmt"
@@ -17,16 +16,15 @@ type Router struct {
 	logger  log15.Logger
 	config  *config.Config
 	service *services.ServiceRoot
-	elastic *repository.Elastic
 }
 
-func NewRouter(cfg *config.Config) (*Router, error) {
+func NewRouter(cfg *config.Config, service *services.ServiceRoot) (*Router, error) {
 	r := &Router{
-		engine: gin.New(),
-		config: cfg,
-		logger: log15.New("module", "api"),
+		engine:  gin.New(),
+		config:  cfg,
+		logger:  log15.New("module", "api"),
+		service: service,
 	}
-	var err error
 
 	r.engine.Use(gin.Logger())
 	r.engine.Use(gin.Recovery())
@@ -41,11 +39,6 @@ func NewRouter(cfg *config.Config) (*Router, error) {
 		},
 		MaxAge: 12 * time.Hour,
 	}))
-
-	if r.service, err = services.NewService(cfg); err != nil {
-		r.logger.Crit("Failed Connect ElasticSearch", "crit", err)
-		return nil, err
-	}
 
 	api.NewCreateApi(r.engine, r.service.Create)
 	api.NewSearchApi(r.engine, r.service.Search)

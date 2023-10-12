@@ -35,7 +35,7 @@ func (m *Create) createUser(c *gin.Context) {
 		return
 	}
 
-	if err := m.service.CreateData("user", schema.User{
+	if err := m.service.CreateData(types.Index, schema.User{
 		Name:    req.Name,
 		Age:     req.Age,
 		Address: req.Address,

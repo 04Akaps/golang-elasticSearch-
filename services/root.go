@@ -7,7 +7,7 @@ import (
 )
 
 type ServiceRoot struct {
-	elasticSearch *repository.Elastic
+	ElasticSearch *repository.Elastic
 	logger        log15.Logger
 
 	Search *Search
@@ -23,15 +23,15 @@ func NewService(cfg *config.Config) (*ServiceRoot, error) {
 	}
 	var err error
 
-	if service.elasticSearch, err = repository.NewElastic(cfg); err != nil {
+	if service.ElasticSearch, err = repository.NewElastic(cfg); err != nil {
 		return nil, err
 	}
 
-	service.Search = newSearchService(service.elasticSearch.Search)
-	service.Update = newUpdateService(service.elasticSearch)
-	service.Delete = newDeleteService(service.elasticSearch)
-	service.Create = newCreateService(service.elasticSearch.Create)
-	service.Admin = newAdminService(service.elasticSearch.Admin)
+	service.Search = newSearchService(service.ElasticSearch.Search)
+	service.Update = newUpdateService(service.ElasticSearch)
+	service.Delete = newDeleteService(service.ElasticSearch)
+	service.Create = newCreateService(service.ElasticSearch.Create)
+	service.Admin = newAdminService(service.ElasticSearch.Admin)
 
 	return service, nil
 }
