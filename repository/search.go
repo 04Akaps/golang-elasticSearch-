@@ -50,6 +50,11 @@ func (s *Search) SearchByV8Migration(index string, query map[string]interface{})
 		return nil, err
 	} else {
 
+		if len(searchResponse.Warnings()) != 0 {
+			fmt.Println("Warnings is existed")
+			fmt.Println(searchResponse.Warnings())
+		}
+
 		if hits, err := parsingV8Response(searchResponse); err != nil {
 			return nil, err
 		} else {
@@ -60,20 +65,13 @@ func (s *Search) SearchByV8Migration(index string, query map[string]interface{})
 					continue
 				} else {
 					var m schema.Migration
-					
+
 					if err = json.Unmarshal(responseByte, &m); err != nil {
 						continue
 					} else {
 						migrationResponse = append(migrationResponse, &m)
 					}
 				}
-
-				// -> 타입이 map[string]interface이기 떄문에 reflect를 통한 type 체크 불필요
-				//fmt.Println(source.Source)
-				//fmt.Println(reflect.TypeOf(source.Source))
-				//if reflect.TypeOf(source.Source) == reflect.TypeOf(schema.Migration{}) {
-				//	migrationResponse = append(migrationResponse, source.Source.(*schema.Migration))
-				//}
 			}
 			return migrationResponse, nil
 		}

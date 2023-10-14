@@ -38,11 +38,24 @@ func newSearchService(elasticSearch *repository.Search) *Search {
 	return &Search{search: elasticSearch}
 }
 
+func defaultQuery() map[string]interface{} {
+	return map[string]interface{}{
+		"query": map[string]interface{}{},
+	}
+}
+
+// 해당 함수는 실제 API에 전송하는 쿼리의 형태로 ElasticSearch를 다룰 수 있다.
 func (s *Search) FindAllByV8(index string, size types.Size) ([]*schema.Migration, error) {
+	// 해당 함수에 대한 설명은 다음 블로그를 참고
+	// -> https://medium.com/@sdl182975/elasticsearch-golang%EC%97%90%EC%84%9C-%ED%99%9C%EC%9A%A9%ED%95%98%EA%B8%B0-0020514305fa
+
 	query := map[string]interface{}{
 		"query": map[string]interface{}{
-			"match": map[string]interface{}{
-				"keyWord": "0x4ce474bc829f545db5675be2072e61a7d5d3e6d0",
+			"match_phrase": map[string]interface{}{
+				"keyWord": map[string]interface{}{
+					"query": "0x4ce474bc829f545db5675be2072e61a7d5d3e6d0 0.695542",
+					"slop":  1,
+				},
 			},
 		},
 	}
