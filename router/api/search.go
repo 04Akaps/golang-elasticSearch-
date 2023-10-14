@@ -34,7 +34,7 @@ func (m *Search) findAll(c *gin.Context) {
 
 	if err := c.ShouldBindJSON(&req); err != nil {
 		errResponse(c, err.Error())
-	} else if response, err := m.service.FindAll(types.Index, req.Size, req.Sort); err != nil {
+	} else if response, err := m.service.FindAllByV8(types.Index, req.Size); err != nil {
 		errResponse(c, err.Error())
 	} else {
 		successResponse(c, response)

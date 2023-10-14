@@ -38,9 +38,16 @@ func newSearchService(elasticSearch *repository.Search) *Search {
 	return &Search{search: elasticSearch}
 }
 
-func (s *Search) FindAll(index string, size types.Size, text types.Sort) ([]*schema.Migration, error) {
-	query := elastic.NewBoolQuery()
-	return s.search.SearchMigration(index, query, size, text)
+func (s *Search) FindAllByV8(index string, size types.Size) ([]*schema.Migration, error) {
+	query := map[string]interface{}{
+		"query": map[string]interface{}{
+			"match": map[string]interface{}{
+				"keyWord": "0x4ce474bc829f545db5675be2072e61a7d5d3e6d0",
+			},
+		},
+	}
+
+	return s.search.SearchByV8Migration(index, query)
 }
 
 func (s *Search) SearchByName(index, name string, size types.Size, text types.Sort) ([]*schema.User, error) {
